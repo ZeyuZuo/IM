@@ -1,14 +1,13 @@
 package com.example.chat.netty.handler;
 
-import com.alibaba.fastjson.JSONObject;
-import com.example.chat.ChatApplication;
 import com.example.chat.mapper.jpa.GroupUserMapper;
 import com.example.chat.mapper.po.GroupUserPo;
 import com.example.chat.netty.UserChannel;
 import com.example.chat.netty.element.ChatActionEnum;
 import com.example.chat.netty.element.ChatMsg;
 import com.example.chat.netty.element.Content;
-import com.example.chat.netty.utils.JsonUtils;
+import com.example.core.auth.TokenUtils;
+import com.example.core.utils.JsonUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -16,9 +15,9 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,6 +28,7 @@ import java.util.Objects;
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    private final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 
     private GroupUserMapper groupUserMapper;
 
@@ -37,19 +37,29 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         this.groupUserMapper = groupUserMapper;
     }
 
-    private void send(ChatMsg chatMsg){
+
+    private void sendChatMsg(ChatMsg chatMsg, Channel receiverChannel){
+
+        if(receiverChannel == null){
+            logger.debug("receiver {} offline",chatMsg.getReceiver());
+            System.out.println("receiver offline");
+            return;
+        }
+
         String sender = chatMsg.getSender();
         String receiver = chatMsg.getReceiver();
         String msgText = chatMsg.getMsg();
         String group = chatMsg.getGroup();
 
         if(Objects.equals(group, "empty")){
+            logger.debug("{} send {} to {}",sender,msgText,receiver);
             System.out.printf("%s send %s to %s\n", sender, msgText, receiver);
         }else {
+            logger.debug("{} send {} to group {}, this is to {}",sender,msgText,group,receiver);
             System.out.printf("%s send %s to group %s, this is to %s\n", sender, msgText, group, receiver);
         }
 
-        Channel receiverChannel = UserChannel.get(receiver);
+        // Channel receiverChannel = UserChannel.get(receiver);
         if (receiverChannel == null) {
             System.out.println("receiver offline");
         } else {
@@ -60,17 +70,41 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         }
     }
 
+    private void send(Object s, Channel receiverChannel){
+        if(receiverChannel==null){
+            logger.debug("receiver offline");
+            System.out.println("receiver offline");
+        }
+
+        Channel findChannel = users.find(receiverChannel.id());
+        if (findChannel != null) {
+            receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.obj2Json(s)));
+        }
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
 
-        // 获取客户端传输过来的消息
         String text = msg.text();
         Channel currentChannel = ctx.channel();
 
-        // 1. 获取客户端发来的消息
-        Content content = JsonUtils.json2Obj(text, Content.class);
-        Integer action = content.getAction();
 
+        // 1. 获取客户端发来的消息
+        Content content = new Content();
+        try{
+            content = JsonUtils.json2Obj(text, Content.class);
+        }catch(Exception e){
+            logger.debug("消息转换失败");
+            System.out.println("消息转换失败");
+        }
+        String token = content.getToken();
+
+        if(token==null || !TokenUtils.verify(token)){
+            String notVerified = "you're not verified, please login";
+            send(notVerified,currentChannel);
+            return;
+        }
+        Integer action = content.getAction();
 
         // 2. 判断消息类型，根据不同的类型来处理不同的业务
         if (Objects.equals(action, ChatActionEnum.CONNECT.getType())) {
@@ -89,8 +123,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
         } else if (Objects.equals(action, ChatActionEnum.CHAT.getType())) {
             ChatMsg chatMsg = content.getChatMsg();
+            Channel receiverChannel = UserChannel.get(content.getChatMsg().getReceiver());
             if(Objects.equals("empty",chatMsg.getGroup())){
-                send(chatMsg);
+                sendChatMsg(chatMsg, receiverChannel);
             }
         } else if(Objects.equals(action, ChatActionEnum.GROUPCHAT.getType())) {
             ChatMsg chatMsg = content.getChatMsg();
@@ -103,9 +138,10 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             for(GroupUserPo po : poList){
                 // System.out.println(po.getUser());
                 String receiver = po.getUser();
+                Channel receiverChannel = UserChannel.get(receiver);
                 if(!Objects.equals(receiver,sender)){
                     chatMsg.setReceiver(receiver);
-                    send(chatMsg);
+                    sendChatMsg(chatMsg, receiverChannel);
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.example.chat.netty.utils;
+package com.example.core.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

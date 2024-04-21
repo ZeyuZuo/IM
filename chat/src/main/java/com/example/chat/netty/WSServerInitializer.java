@@ -12,7 +12,6 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
@@ -35,6 +34,7 @@ public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
         // 对httpMessage进行聚合，聚合成FullHttpRequest或FullHttpResponse
         // 几乎在netty中的编程，都会使用到此hanler
         pipeline.addLast(new HttpObjectAggregator(1024*64));
+        // pipeline.addLast(new HttpMessageHandler());
 
         // ====================== 以上是用于支持http协议    ======================
 

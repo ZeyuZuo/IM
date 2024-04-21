@@ -5,6 +5,7 @@ import com.example.msg.controller.vo.TranslateVo;
 import com.example.msg.translate.TransApi;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping(value = "/msg", produces = "application/json;charset=UTF-8")

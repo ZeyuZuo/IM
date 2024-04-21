@@ -6,6 +6,7 @@ import com.example.user.mapper.jpa.LogInMapper;
 import com.example.user.mapper.po.LogInPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ReturnObject login(LoginDataVo data){
+    public ReturnObject login(@RequestBody LoginDataVo data){
 
         LogInPo po = logInMapper.findByUser(data.getUser());
         if(po!=null && Objects.equals(po.getPwd(),data.getPwd())){
