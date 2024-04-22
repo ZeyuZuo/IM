@@ -12,4 +12,13 @@ public class ChatMsg {
     private String receiver;
     private String msg;
     private String group;
+
+    public String toString(){
+        return "{" +
+                "\"sender\":\"" + sender + "\"" +
+                ", \"receiver\":\"" + receiver + "\"" +
+                ", \"msg\":\"" + msg + "\"" +
+                ", \"group\":\"" + group + "\"" +
+                "}";
+    }
 }

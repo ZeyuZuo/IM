@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/chat", produces = "application/json;charset=UTF-8")
 public class ChatController {
 
-//    @Autowired
-//    private NettyServer server;
+    @Autowired
+    private NettyServer server;
 
-//    @PostMapping("/sendMsg")
-//    public void sendMsg(@RequestBody Content content){
-//        server.sendMsg(content);
-//    }
+    @PostMapping("/sendMsg")
+    public void sendMsg(@RequestBody Content content){
+        server.sendMsg(content);
+    }
 }

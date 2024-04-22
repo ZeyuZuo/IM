@@ -1,25 +1,26 @@
-package com.example.chat.netty;
-
-import com.example.chat.netty.element.ChatMsg;
-import com.example.chat.netty.element.Content;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import java.net.InetSocketAddress;
-
-
-// @Component
-public class NettyServer {
+//package com.example.chat.netty;
+//
+//import com.example.chat.netty.element.ChatMsg;
+//import com.example.chat.netty.element.Content;
+//import com.example.core.route.ModulePort;
+//import io.netty.bootstrap.ServerBootstrap;
+//import io.netty.channel.Channel;
+//import io.netty.channel.ChannelFuture;
+//import io.netty.channel.ChannelFutureListener;
+//import io.netty.channel.EventLoopGroup;
+//import io.netty.channel.nio.NioEventLoopGroup;
+//import io.netty.channel.socket.nio.NioServerSocketChannel;
+//import jakarta.annotation.PostConstruct;
+//import jakarta.annotation.PreDestroy;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.springframework.stereotype.Component;
+//
+//import java.net.InetSocketAddress;
+//
+//
+//@Component
+//public class NettyServer {
 //    private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
 //    private final ServerBootstrap serverBootstrap = new ServerBootstrap();
 //    private ChannelFuture future;
@@ -32,7 +33,7 @@ public class NettyServer {
 //        serverBootstrap
 //                .group(boss, work)
 //                .channel(NioServerSocketChannel.class)
-//                .localAddress(new InetSocketAddress(12346))
+//                .localAddress(new InetSocketAddress(ModulePort.NETTY.getType()))
 //                .childHandler(new NettyServerInit());
 //        this.future = serverBootstrap.bind().sync();
 //        if(this.future.isSuccess()){
@@ -59,15 +60,15 @@ public class NettyServer {
 //            System.out.printf("%s不在线",chatMsg.getReceiver());
 //            // return;
 //        }
-//        try{
-//            ChannelFuture future = receiveChannel.writeAndFlush(content);
-//
-//            future.addListener((ChannelFutureListener) channelFuture ->
-//                    logger.debug("服务端转发Goolgel protocol 成功 ：{}", content.toString())
-//            );
-//        }catch(NullPointerException e){
-//            logger.debug("nullPointException when sendMsg");
-//            System.out.println("nullPointException when sendMsg");
-//        }
+////        try{
+////            // ChannelFuture future = receiveChannel.writeAndFlush(content);
+////
+////            future.addListener((ChannelFutureListener) channelFuture ->
+////                    logger.debug("服务端转发Goolgel protocol 成功 ：{}", content.toString())
+////            );
+////        }catch(NullPointerException e){
+////            logger.debug("nullPointException when sendMsg");
+////            System.out.println("nullPointException when sendMsg");
+////        }
 //    }
-}
+//}

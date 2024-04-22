@@ -19,4 +19,12 @@ public class Content implements Serializable {
         this.chatMsg = null;
         this.token = null;
     }
+
+    public String toString(){
+        return "{" +
+                "\"action\":" + action +
+                ", \"chatMsg\":" + chatMsg +
+                ", \"token\":\"" + token + "\"" +
+                "}";
+    }
 }
