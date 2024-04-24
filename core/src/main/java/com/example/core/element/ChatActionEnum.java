@@ -1,4 +1,4 @@
-package com.example.chat.netty.element;
+package com.example.core.element;
 
 
 import lombok.Getter;
