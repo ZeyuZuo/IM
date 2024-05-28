@@ -11,17 +11,18 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 @Service
 public class RocketMQService {
     private RocketMQTemplate rocketMQTemplate;
-    private RedissonClient redissonClient;
-    private RedisTemplate<String,String> redisTemplate;
+
+    private Jedis jedis;
 
     @Autowired
-    public RocketMQService(RocketMQTemplate rocketMQTemplate, RedissonClient redissonClient){
+    public RocketMQService(RocketMQTemplate rocketMQTemplate, Jedis jedis){
         this.rocketMQTemplate = rocketMQTemplate;
-        this.redissonClient = redissonClient;
+        this.jedis = jedis;
     }
 
     public boolean sendMsgToPerson(Content content){
@@ -32,14 +33,6 @@ public class RocketMQService {
         Message message = MessageBuilder.withPayload(contentStr).build();
         String redisStr = sender+"Server";
 
-        try{
-            if(!redisTemplate.hasKey(redisStr)){
-                System.out.println("没有上线");
-            }
-            String nettyServer = redisTemplate.opsForValue().get(redisStr);
-        }catch(Exception e){
-            System.out.println("redis 出错");
-        }
 
         rocketMQTemplate.asyncSend("");
     }

@@ -8,7 +8,8 @@ public enum ChatActionEnum {
     CONNECT(0),
     CHAT(1),
     GROUPCHAT(2),
-    KEEPALIVE(3);
+    SENDFILE(3),
+    KEEPALIVE(4);
 
     public final Integer type;
 

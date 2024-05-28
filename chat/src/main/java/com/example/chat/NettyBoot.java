@@ -1,15 +1,12 @@
 package com.example.chat;
 
 import com.example.chat.mapper.jpa.GroupUserMapper;
-import com.example.chat.mapper.po.GroupUserPo;
 import com.example.chat.netty.WSServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-
-import java.util.List;
+import redis.clients.jedis.Jedis;
 
 @Component
 public class NettyBoot implements ApplicationListener<ContextRefreshedEvent> {

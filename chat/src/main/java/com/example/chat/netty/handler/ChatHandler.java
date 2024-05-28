@@ -2,12 +2,13 @@ package com.example.chat.netty.handler;
 
 import com.example.chat.mapper.jpa.GroupUserMapper;
 import com.example.chat.mapper.po.GroupUserPo;
-import com.example.chat.netty.UserChannel;
 import com.example.core.auth.TokenUtils;
 import com.example.core.element.ChatActionEnum;
 import com.example.core.element.ChatMsg;
 import com.example.core.element.Content;
+import com.example.core.utils.IpUtils;
 import com.example.core.utils.JsonUtils;
+import com.example.core.utils.RedisUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,7 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
+import java.net.Inet4Address;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +34,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     private final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 
     private GroupUserMapper groupUserMapper;
+    private RedisUtils redisUtils;
 
     @Autowired
     public ChatHandler(GroupUserMapper groupUserMapper){
@@ -112,18 +116,20 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             ChatMsg chatMsg = content.getChatMsg();
             if(Objects.equals("server",chatMsg.getReceiver())&&Objects.equals("empty",chatMsg.getGroup())){
                 String sender = chatMsg.getSender();
-                UserChannel.put(sender, currentChannel);
+                // UserChannel.put(sender, currentChannel);
                 for (Channel channel : users) {
                     System.out.println(channel.id().asLongText());
                 }
-                UserChannel.output();
+                // UserChannel.output();
+                redisUtils.set(chatMsg.getSender(), IpUtils.getIp());
+                System.out.println(redisUtils.get(chatMsg.getSender()));
             }else{
                 System.out.println("连接服务器失败");
             }
 
         } else if (Objects.equals(action, ChatActionEnum.CHAT.getType())) {
             ChatMsg chatMsg = content.getChatMsg();
-            Channel receiverChannel = UserChannel.get(content.getChatMsg().getReceiver());
+            // Channel receiverChannel = UserChannel.get(content.getChatMsg().getReceiver());
             if(Objects.equals("empty",chatMsg.getGroup())){
                 sendChatMsg(chatMsg, receiverChannel);
             }
