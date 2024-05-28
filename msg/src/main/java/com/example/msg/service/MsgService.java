@@ -1,9 +1,12 @@
 package com.example.msg.service;
 
 import com.example.core.element.ChatMsg;
+import com.example.core.utils.JsonUtils;
 import com.example.msg.mapper.jpa.GroupUserMapper;
 import com.example.msg.mapper.po.GroupUserPo;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
@@ -24,7 +27,9 @@ public class MsgService {
     }
 
     private void sendMq(ChatMsg chatMsg, String ip) {
-
+        String msg = JsonUtils.obj2Json(chatMsg);
+        String topic = ip+"Netty";
+        rocketMQTemplate.asyncSend();
     }
 
     public void send2person(ChatMsg chatMsg) {
