@@ -14,22 +14,20 @@ import redis.clients.jedis.Jedis;
 // @Component
 public class WSServer {
 
-    private GroupUserMapper groupUserMapper;
-
     private EventLoopGroup mainGroup;
     private EventLoopGroup subGroup;
     private ServerBootstrap server;
     private ChannelFuture future;
 
 //    @Autowired
-    public WSServer(GroupUserMapper groupUserMapper) {
-        this.groupUserMapper = groupUserMapper;
+    public WSServer(GroupUserMapper groupUserMapper, Jedis jedis) {
+
         mainGroup = new NioEventLoopGroup();
         subGroup = new NioEventLoopGroup();
         server = new ServerBootstrap();
         server.group(mainGroup, subGroup) //
                 .channel(NioServerSocketChannel.class) //
-                .childHandler(new WSServerInitializer(groupUserMapper));
+                .childHandler(new WSServerInitializer(groupUserMapper, jedis));
     }
 
     public void start() {

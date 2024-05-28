@@ -16,10 +16,10 @@
     <description>IM</description>
 
     <modules>
-        <module>chat</module>
-        <module>user</module>
-        <module>msg</module>
-        <module>gateway</module>
+<!--        <module>chat</module>-->
+<!--        <module>user</module>-->
+<!--        <module>msg</module>-->
+<!--        <module>gateway</module>-->
         <module>core</module>
     </modules>
 

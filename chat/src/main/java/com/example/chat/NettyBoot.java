@@ -11,17 +11,19 @@ import redis.clients.jedis.Jedis;
 @Component
 public class NettyBoot implements ApplicationListener<ContextRefreshedEvent> {
 
+    private final Jedis jedis;
     private GroupUserMapper groupUserMapper;
 
     @Autowired
-    public NettyBoot(GroupUserMapper groupUserMapper){
+    public NettyBoot(GroupUserMapper groupUserMapper, Jedis jedis){
         this.groupUserMapper = groupUserMapper;
+        this.jedis = jedis;
     }
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(event.getApplicationContext().getParent()==null) {
             try {
-                new WSServer(groupUserMapper).start();
+                new WSServer(groupUserMapper, jedis).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }

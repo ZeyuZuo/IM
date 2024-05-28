@@ -12,19 +12,16 @@ public class Content implements Serializable {
 
     private Integer action;
     private ChatMsg chatMsg;
-    private String token;
 
     public Content(){
         this.action = -1;
         this.chatMsg = null;
-        this.token = null;
     }
 
     public String toString(){
         return "{" +
                 "\"action\":" + action +
                 ", \"chatMsg\":" + chatMsg +
-                ", \"token\":\"" + token + "\"" +
                 "}";
     }
 }

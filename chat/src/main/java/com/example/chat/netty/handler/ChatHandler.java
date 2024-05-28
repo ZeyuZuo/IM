@@ -34,11 +34,12 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     private final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 
     private GroupUserMapper groupUserMapper;
-    private RedisUtils redisUtils;
+    private Jedis jedis;
 
     @Autowired
-    public ChatHandler(GroupUserMapper groupUserMapper){
+    public ChatHandler(GroupUserMapper groupUserMapper, Jedis jedis){
         this.groupUserMapper = groupUserMapper;
+        this.jedis = jedis;
     }
 
 
