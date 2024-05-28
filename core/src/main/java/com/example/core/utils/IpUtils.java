@@ -4,6 +4,9 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 
 public class IpUtils {
     public static String getPrivateIp() {
@@ -28,6 +31,24 @@ public class IpUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getPublicIP() {
+        String ipService = "http://checkip.amazonaws.com";
+        try {
+            URL url = new URL(ipService);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
+
+            try (Scanner scanner = new Scanner(connection.getInputStream())) {
+                return scanner.useDelimiter("\\A").next().trim();  // 读取流并返回IP
+            }
+        } catch (Exception e) {
+            System.err.println("Error when retrieving public IP: " + e.getMessage());
+            return null;
+        }
     }
 
 //    public String getPublicIp(){

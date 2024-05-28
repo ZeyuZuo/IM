@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MsgService {
@@ -27,9 +28,10 @@ public class MsgService {
     }
 
     private void sendMq(ChatMsg chatMsg, String ip) {
-        String msg = JsonUtils.obj2Json(chatMsg);
-        String topic = ip+"Netty";
-        rocketMQTemplate.asyncSend();
+        String topic = ip + "netty";
+        // 发送消息
+        Message<String> message = MessageBuilder.withPayload(Objects.requireNonNull(JsonUtils.obj2Json(chatMsg))).build();
+        rocketMQTemplate.send(topic, message);
     }
 
     public void send2person(ChatMsg chatMsg) {
