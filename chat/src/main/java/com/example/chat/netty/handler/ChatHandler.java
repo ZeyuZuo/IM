@@ -32,12 +32,10 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 
-    private GroupUserMapper groupUserMapper;
     private Jedis jedis;
 
     @Autowired
-    public ChatHandler(GroupUserMapper groupUserMapper, Jedis jedis){
-        this.groupUserMapper = groupUserMapper;
+    public ChatHandler(Jedis jedis){
         this.jedis = jedis;
     }
 

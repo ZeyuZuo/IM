@@ -20,14 +20,14 @@ public class WSServer {
     private ChannelFuture future;
 
 //    @Autowired
-    public WSServer(GroupUserMapper groupUserMapper, Jedis jedis) {
+    public WSServer(Jedis jedis) {
 
         mainGroup = new NioEventLoopGroup();
         subGroup = new NioEventLoopGroup();
         server = new ServerBootstrap();
         server.group(mainGroup, subGroup) //
                 .channel(NioServerSocketChannel.class) //
-                .childHandler(new WSServerInitializer(groupUserMapper, jedis));
+                .childHandler(new WSServerInitializer(jedis));
     }
 
     public void start() {

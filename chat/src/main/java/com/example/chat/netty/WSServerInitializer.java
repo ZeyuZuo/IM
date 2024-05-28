@@ -18,11 +18,9 @@ import redis.clients.jedis.Jedis;
 public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private final Jedis jedis;
-    private GroupUserMapper groupUserMapper;
 
     @Autowired
-    public WSServerInitializer(GroupUserMapper groupUserMapper, Jedis jedis){
-        this.groupUserMapper = groupUserMapper;
+    public WSServerInitializer(Jedis jedis){
         this.jedis = jedis;
     }
 
@@ -65,6 +63,6 @@ public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 
         // 自定义的handler
-        pipeline.addLast(new ChatHandler(groupUserMapper, jedis));
+        pipeline.addLast(new ChatHandler(jedis));
     }
 }
