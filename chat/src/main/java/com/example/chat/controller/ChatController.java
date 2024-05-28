@@ -1,8 +1,8 @@
 //package com.example.chat.controller;
 //
-//import com.example.chat.netty.NettyServer;
-//import com.example.chat.netty.element.Content;
 //import com.example.chat.netty.handler.ChatHandler;
+//import com.example.chat.service.ChatService;
+//import com.example.core.element.Content;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +14,10 @@
 //public class ChatController {
 //
 //    @Autowired
-//    private NettyServer server;
+//    private ChatService chatService;
 //
 //    @PostMapping("/sendMsg")
 //    public void sendMsg(@RequestBody Content content){
-//        server.sendMsg(content);
+//        chatService.send(content);
 //    }
 //}

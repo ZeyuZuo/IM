@@ -7,7 +7,7 @@ import redis.clients.jedis.Jedis;
 
 @Configuration
 public class JedisConfig {
-    @Value("192.168.171.141")
+    @Value("127.0.0.1")
     private String redisUrl;
 
     @Value("6379")

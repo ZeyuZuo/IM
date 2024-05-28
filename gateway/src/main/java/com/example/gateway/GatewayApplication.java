@@ -21,7 +21,6 @@ public class GatewayApplication {
     private final String url = "http://127.0.0.1:";
     private final String userRoute = url + ModulePort.USER.getType().toString();
     private final String msgRoute = url + ModulePort.MSG.getType().toString();
-    private final String chatServer = "ws://127.0.0.1:8088:/ws";
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
@@ -30,8 +29,6 @@ public class GatewayApplication {
                         .uri(userRoute))
                 .route("msg_route", r -> r.path("/msg/**")
                         .uri(msgRoute))
-//                .route("chat_route", r -> r.path("/sendMsg")
-//                        .uri(chatServer))
                 .build();
     }
 

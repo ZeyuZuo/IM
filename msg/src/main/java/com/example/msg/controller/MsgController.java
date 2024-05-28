@@ -1,9 +1,12 @@
 package com.example.msg.controller;
 
 import com.example.core.dto.ReturnObject;
+import com.example.core.element.ChatActionEnum;
+import com.example.core.element.ChatMsg;
 import com.example.core.element.Content;
 import com.example.msg.controller.vo.TranslateVo;
 import com.example.msg.dao.bo.Msg;
+import com.example.msg.service.MsgService;
 import com.example.msg.service.RocketMQService;
 import com.example.msg.translate.TransApi;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -13,16 +16,18 @@ import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.MediaType;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping(value = "/msg", produces = "application/json;charset=UTF-8")
 public class MsgController {
     private static final String APP_ID = "20240415002024472";
     private static final String SECURITY_KEY = "3FR6je0HK4CsuDXAHjkl";
-    private RocketMQService rocketMQService;
+    private MsgService msgService;
 
     @Autowired
-    public MsgController(RocketMQService rocketMQService){
-        this.rocketMQService = rocketMQService;
+    public MsgController(MsgService msgService) {
+        this.msgService = msgService;
     }
 
     @PostMapping("/translate")
@@ -41,6 +46,15 @@ public class MsgController {
 
     @PostMapping("/sendMsg")
     public ReturnObject sendMsg(@RequestBody Content content){
+        Integer action = content.getAction();
+        ChatMsg chatMsg = new ChatMsg();
+        if(Objects.equals(action, ChatActionEnum.CHAT.getType())){
+            msgService.send2person(chatMsg);
+        }else if(Objects.equals(action, ChatActionEnum.GROUPCHAT.getType())){
+            msgService.send2group(chatMsg);
+        }else{
+            return new ReturnObject(-1,"action error",null);
+        }
 
         return new ReturnObject(null);
     }

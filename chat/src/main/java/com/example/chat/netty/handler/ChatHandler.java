@@ -8,7 +8,6 @@ import com.example.core.element.ChatMsg;
 import com.example.core.element.Content;
 import com.example.core.utils.IpUtils;
 import com.example.core.utils.JsonUtils;
-import com.example.core.utils.RedisUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
-import java.net.Inet4Address;
 import java.util.List;
 import java.util.Objects;
 

@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 @Setter
 @Getter
-public class ChatMsg {
+public class ChatMsg implements Cloneable{
     private String sender;
     private String receiver;
     private String msg;
@@ -18,5 +18,10 @@ public class ChatMsg {
                 ", \"receiver\":\"" + receiver + "\"" +
                 ", \"msg\":\"" + msg + "\"" +
                 "}";
+    }
+
+    @Override
+    public ChatMsg clone() throws CloneNotSupportedException {
+        return (ChatMsg) super.clone();
     }
 }
