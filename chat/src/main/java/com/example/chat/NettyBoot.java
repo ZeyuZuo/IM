@@ -1,6 +1,5 @@
 package com.example.chat;
 
-import com.example.chat.mapper.jpa.GroupUserMapper;
 import com.example.chat.netty.WSServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

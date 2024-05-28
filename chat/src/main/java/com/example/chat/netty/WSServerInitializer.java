@@ -1,6 +1,5 @@
 package com.example.chat.netty;
 
-import com.example.chat.mapper.jpa.GroupUserMapper;
 import com.example.chat.netty.handler.ChatHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

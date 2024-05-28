@@ -1,7 +1,5 @@
 package com.example.chat.netty.handler;
 
-import com.example.chat.mapper.jpa.GroupUserMapper;
-import com.example.chat.mapper.po.GroupUserPo;
 import com.example.chat.netty.UserChannel;
 import com.example.core.auth.TokenUtils;
 import com.example.core.element.ChatActionEnum;
