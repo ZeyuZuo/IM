@@ -1,6 +1,5 @@
 package com.example.gateway;
 
-import com.example.core.route.ModulePort;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -18,9 +17,8 @@ public class GatewayApplication {
         SpringApplication.run(GatewayApplication.class, args);
     }
 
-    private final String url = "http://127.0.0.1:";
-    private final String userRoute = url + ModulePort.USER.getType().toString();
-    private final String msgRoute = url + ModulePort.MSG.getType().toString();
+    private final String userRoute = Config.USER_HOST + ":" + Config.USER_PORT;
+    private final String msgRoute = Config.MSG_HOST + ":" + Config.MSG_PORT;
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {

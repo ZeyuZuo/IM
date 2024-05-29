@@ -1,24 +1,23 @@
 package com.example.chat;
 
-import com.example.core.element.Config;
 import com.example.core.utils.IpUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
-import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 
 @SpringBootApplication
 public class ChatApplication {
 
+    @Value("${zookeeper.address}")
+    private static String zookeeperAddress;
+
     public static void main(String[] args) throws Exception {
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                        .connectString(Config.ZOOKEEPER_HOST+":"+Config.ZOOKEEPER_PORT)
+                        .connectString(zookeeperAddress)
                         .sessionTimeoutMs(60*1000)
                         .connectionTimeoutMs(15*1000)
                         .retryPolicy(new ExponentialBackoffRetry(1000, 3))

@@ -1,15 +1,18 @@
 package com.example.user.service;
 
-import com.example.core.element.Config;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService {
+
+    @Value("${zookeeper.address}")
+    private String zookeeperAddress;
 
     private static int selectNettyIndex = 0;
 
@@ -19,7 +22,7 @@ public class UserService {
         // 轮询选择netty服务
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
-                    .connectString(Config.ZOOKEEPER_HOST+":"+Config.ZOOKEEPER_PORT)
+                    .connectString(zookeeperAddress)
                     .sessionTimeoutMs(60*1000)
                     .connectionTimeoutMs(15*1000)
                     .retryPolicy(new ExponentialBackoffRetry(1000, 3))
