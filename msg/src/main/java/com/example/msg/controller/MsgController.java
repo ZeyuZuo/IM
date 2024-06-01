@@ -4,10 +4,10 @@ import com.example.core.dto.ReturnObject;
 import com.example.core.element.ChatActionEnum;
 import com.example.core.element.ChatMsg;
 import com.example.core.element.Content;
+import com.example.msg.controller.vo.MsgVo;
 import com.example.msg.controller.vo.TranslateVo;
 import com.example.msg.dao.bo.Msg;
 import com.example.msg.service.MsgService;
-import com.example.msg.service.RocketMQService;
 import com.example.msg.translate.TransApi;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.redisson.api.RedissonClient;
@@ -45,12 +45,14 @@ public class MsgController {
     }
 
     @PostMapping("/sendMsg")
-    public ReturnObject sendMsg(@RequestBody Content content){
-        Integer action = content.getAction();
-        ChatMsg chatMsg = new ChatMsg();
+    public ReturnObject sendMsg(@RequestBody MsgVo msgVo){
+        Integer action = msgVo.getAction();
+
         if(Objects.equals(action, ChatActionEnum.CHAT.getType())){
+            ChatMsg chatMsg = new ChatMsg(msgVo.getSender(), msgVo.getReceiver(), msgVo.getMsg());
             msgService.send2person(chatMsg);
         }else if(Objects.equals(action, ChatActionEnum.GROUPCHAT.getType())){
+            ChatMsg chatMsg = new ChatMsg(msgVo.getSender(), msgVo.getReceiver(), msgVo.getMsg(), true);
             msgService.send2group(chatMsg);
         }else{
             return new ReturnObject(-1,"action error",null);

@@ -1,7 +1,13 @@
 package com.example.chat;
 
 import com.example.chat.netty.WSServer;
+import com.example.core.utils.IpUtils;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -26,4 +32,5 @@ public class NettyBoot implements ApplicationListener<ContextRefreshedEvent> {
             }
         }
     }
+
 }

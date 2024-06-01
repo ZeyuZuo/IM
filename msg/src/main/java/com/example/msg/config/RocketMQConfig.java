@@ -1,6 +1,9 @@
 package com.example.msg.config;
 
 import ch.qos.logback.core.model.processor.DefaultProcessor;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
@@ -12,21 +15,38 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RocketMQConfig {
-    private Logger logger = LoggerFactory.getLogger(RocketMQConfig.class);
+    // private Logger logger = LoggerFactory.getLogger(RocketMQConfig.class);
 
-    @Value("127.0.0.1:12347")
+    @Value("${rocketmq.server}")
     private String nameStr;
 
     @Value("msg")
     private String producerGroup;
 
-    @Bean
-    public RocketMQTemplate rocketMQTemplate(){
-        DefaultMQProducer producer = new DefaultMQProducer();
+    private DefaultMQProducer producer = null;
+
+    @PostConstruct
+    public void init() throws MQClientException {
+        producer = new DefaultMQProducer();
         producer.setProducerGroup(this.producerGroup);
         producer.setNamesrvAddr(this.nameStr);
+        producer.start();
+    }
+
+    @Bean
+    public RocketMQTemplate rocketMQTemplate() throws MQClientException {
         RocketMQTemplate template = new RocketMQTemplate();
         template.setProducer(producer);
         return template;
+    }
+
+    @PreDestroy
+    public void destroy() {
+        // logger.info("destroy rocketMQ producer");
+        // producer.shutdown();
+        if(producer != null) {
+            System.out.println("destroy rocketMQ producer");
+            producer.shutdown();
+        }
     }
 }

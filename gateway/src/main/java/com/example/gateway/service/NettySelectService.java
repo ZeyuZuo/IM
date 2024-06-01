@@ -1,4 +1,4 @@
-package com.example.user.service;
+package com.example.gateway.service;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService {
-
+public class NettySelectService {
     @Value("${zookeeper.address}")
     private String zookeeperAddress;
 
@@ -32,13 +31,19 @@ public class UserService {
             client.start();
 
             List<String> nettyServices = client.getChildren().forPath("/");
+
+            if(nettyServices.isEmpty()) {
+                System.out.println("No netty service available");
+                return null;
+            }
             for(String nettyService : nettyServices) {
                 System.out.println("nettyService: " + nettyService);
             }
             if (selectNettyIndex >= nettyServices.size()) {
                 selectNettyIndex = 0;
             }
-            publicIP = new String(client.getData().forPath(nettyServices.get(selectNettyIndex++)));
+            String tmp = nettyServices.get(selectNettyIndex++);
+            publicIP = tmp.split("-")[1];
 
             client.close();
 
