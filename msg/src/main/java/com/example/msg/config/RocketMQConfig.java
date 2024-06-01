@@ -24,18 +24,15 @@ public class RocketMQConfig {
     private String producerGroup;
 
     private DefaultMQProducer producer = null;
-
-    @PostConstruct
-    public void init() throws MQClientException {
-        producer = new DefaultMQProducer();
-        producer.setProducerGroup(this.producerGroup);
-        producer.setNamesrvAddr(this.nameStr);
-        producer.start();
-    }
+    private RocketMQTemplate template = null;
 
     @Bean
     public RocketMQTemplate rocketMQTemplate() throws MQClientException {
-        RocketMQTemplate template = new RocketMQTemplate();
+        producer = new DefaultMQProducer();
+        producer.setProducerGroup(this.producerGroup);
+        producer.setNamesrvAddr(this.nameStr);
+        // producer.start();
+        template = new RocketMQTemplate();
         template.setProducer(producer);
         return template;
     }

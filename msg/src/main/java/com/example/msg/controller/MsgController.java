@@ -12,6 +12,7 @@ import com.example.msg.translate.TransApi;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.MediaType;

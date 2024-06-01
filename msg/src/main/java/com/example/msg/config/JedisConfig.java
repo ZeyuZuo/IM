@@ -9,13 +9,13 @@ import redis.clients.jedis.Jedis;
 public class JedisConfig {
 
     @Value("${redis.host}")
-    private String redisUrl;
+    private String redisHost;
 
     @Value("${redis.port}")
-    private Integer port;
+    private int redisPort;
 
     @Bean
     public Jedis jedis(){
-        return new Jedis(redisUrl,port);
+        return new Jedis(redisHost, redisPort);
     }
 }
