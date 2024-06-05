@@ -31,6 +31,8 @@ public class LogInController {
 
     @PostMapping("/login")
     public ReturnObject login(@RequestBody LoginData loginData){
+        System.out.println(loginData.getUser());
+        System.out.println(loginData.getPwd());
         LogInPo po = logInMapper.findByUser(loginData.getUser());
         if(po!=null && Objects.equals(po.getPwd(),loginData.getPwd())){
             String token = TokenUtils.generateToken(po.getUser(),po.getPwd());

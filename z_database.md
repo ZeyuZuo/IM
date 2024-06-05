@@ -24,3 +24,13 @@ INSERT INTO `im`.`groupUser` (`id`, `group`, `user`) VALUES ('2', 'test', 'wy');
 INSERT INTO `im`.`groupUser` (`id`, `group`, `user`) VALUES ('3', 'test', 'xzx');
 INSERT INTO `im`.`groupUser` (`id`, `group`, `user`) VALUES ('4', 'hello', 'zzy');
 INSERT INTO `im`.`groupUser` (`id`, `group`, `user`) VALUES ('5', 'hello', 'xzx');
+
+
+CREATE TABLE `im`.`message` ( \
+  `id` INT AUTO_INCREMENT PRIMARY KEY, \
+  `sender` VARCHAR(256), \
+  `receiver` VARCHAR(256), \
+  `msg` VARCHAR(256), \
+  `chatgroup` VARCHAR(256), \
+  `time` TIMESTAMP , \
+  `is_sent` TINYINT);

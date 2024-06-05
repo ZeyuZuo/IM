@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @Entity
-@Table(name = "groupUser")
+@Table(name = "group_user")
 @ToString(callSuper = true, doNotUseGetters = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupUserPo {

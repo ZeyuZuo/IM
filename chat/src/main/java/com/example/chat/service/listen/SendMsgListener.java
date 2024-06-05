@@ -30,9 +30,6 @@ public class SendMsgListener {
     // private static final Logger log = LoggerFactory.getLogger(SendMsgListener.class);
     private DefaultMQPushConsumer consumer;
 
-    @Autowired
-    private Jedis jedis;
-
     @Value("${rocketmq.server}")
     private String nameServer;
 
@@ -40,7 +37,7 @@ public class SendMsgListener {
 
     @PostConstruct
     public void init() throws Exception {
-        consumer = new DefaultMQPushConsumer("consumerGroup");
+        consumer = new DefaultMQPushConsumer(topic);
         consumer.setNamesrvAddr(nameServer);
         subscribeToTopic(topic);
         consumer.start();
@@ -80,8 +77,10 @@ public class SendMsgListener {
 
     @PreDestroy
     public void destroy() {
+        System.out.println("hello");
         if (consumer != null) {
             consumer.shutdown();
+            System.out.println("consumer shutdown");
             // log.debug("rocketMQ consumer shutdown");
         }
     }

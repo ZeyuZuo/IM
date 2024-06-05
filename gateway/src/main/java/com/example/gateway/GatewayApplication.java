@@ -1,5 +1,6 @@
 package com.example.gateway;
 
+import com.example.gateway.service.MsgFind;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -10,7 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.client.RestClient;
 
 
-@SpringBootApplication
+@SpringBootApplication()
 public class GatewayApplication {
 
     public static void main(String[] args) {
@@ -18,7 +19,6 @@ public class GatewayApplication {
     }
 
     private final String userRoute = Config.USER_HOST + ":" + Config.USER_PORT;
-    private final String msgRoute = Config.MSG_HOST + ":" + Config.MSG_PORT;
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
@@ -26,7 +26,7 @@ public class GatewayApplication {
                 .route("user_route", r -> r.path("/user/**")
                         .uri(userRoute))
                 .route("msg_route", r -> r.path("/msg/**")
-                        .uri(msgRoute))
+                        .uri(MsgFind.getMsgService() + ":" + Config.MSG_PORT))
                 .build();
     }
 

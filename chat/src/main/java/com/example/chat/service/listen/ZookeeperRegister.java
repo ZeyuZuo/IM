@@ -31,7 +31,7 @@ public class ZookeeperRegister {
                 .namespace("netty")
                 .build();
         client.start();
-        String path = "/nettyService-" + IpUtils.getPublicIP() + "-" + port;
+        String path = "/nettyService-" + "1.94.66.243" + "-" + port;
         client.create()
                 .withMode(CreateMode.EPHEMERAL)
                 .forPath(path);
