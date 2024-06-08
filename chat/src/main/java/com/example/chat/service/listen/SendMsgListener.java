@@ -27,12 +27,15 @@ import java.util.List;
 
 @Service
 public class SendMsgListener {
-    // private static final Logger log = LoggerFactory.getLogger(SendMsgListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(SendMsgListener.class);
     private DefaultMQPushConsumer consumer;
 
     @Value("${rocketmq.server}")
     private String nameServer;
 
+    /**
+     * 192.168.0.190 -> 1921680190netty
+     */
     private String topic = IpUtils.getPrivateIp().replace(".","") + "netty";
 
     @PostConstruct
@@ -53,20 +56,18 @@ public class SendMsgListener {
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> list, ConsumeOrderlyContext consumeOrderlyContext) {
                 // 处理逻辑
                 for (MessageExt messageExt : list) {
-                    System.out.println("------------------------------------------------");
-                    System.out.println("receive message: " + new String(messageExt.getBody()));
+                    logger.info("receive message: {}", new String(messageExt.getBody()));
                     ChatMsg chatMsg = JSONObject.parseObject(new String(messageExt.getBody()), ChatMsg.class);
-                    System.out.println("chatMsg : " + chatMsg);
+                    logger.info("receive msg: {}" ,chatMsg);
                     Channel channel = UserChannel.get(chatMsg.getReceiver());
-                    System.out.println("channel : " + channel);
+                    logger.info("receive channel: {}", channel);
                     if (channel != null) {
                         if (ChatHandler.users.contains(channel)) {
                             String msg = JSONObject.toJSONString(chatMsg);
-                            System.out.println("send message : " + msg);
+                            // System.out.println("send message : " + msg);
                             channel.writeAndFlush(new TextWebSocketFrame(msg));
                         }
                     }
-                    System.out.println("------------------------------------------------");
                 }
                 return ConsumeOrderlyStatus.SUCCESS;
             }
@@ -80,8 +81,8 @@ public class SendMsgListener {
         System.out.println("hello");
         if (consumer != null) {
             consumer.shutdown();
-            System.out.println("consumer shutdown");
-            // log.debug("rocketMQ consumer shutdown");
+            // System.out.println("consumer shutdown");
+            logger.debug("rocketMQ consumer shutdown");
         }
     }
 }

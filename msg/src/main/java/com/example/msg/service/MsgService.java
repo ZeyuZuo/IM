@@ -89,8 +89,7 @@ public class MsgService {
                 logger.error("send rocketMQ message: {}, topic: {} failed!!!", message, topic);
                 System.out.println("send fail");
             }
-        }
-        );
+        });
     }
 
     public void send2group(ChatMsg chatMsg) {
